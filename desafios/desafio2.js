@@ -1,21 +1,39 @@
 class Usuario{
-    constructor(name,apellido,libros,mascotas){
-        this.name=name;
+    constructor(nombre,apellido,libros,mascotas){
+        this.nombre=nombre;
         this.apellido=apellido;
         this.libros=libros;
         this.mascotas=mascotas;
     }
 
-    getFullName() {
-        return `${this.name}${this.apellido}`;
+    getFullName () {
+        console.log(this.nombre, this.apellido)
     }
-    getCountMascotas() {
-        return `${this.mascotas}${2}`;
+    addMascota (nuevaMascota) {
+        this.mascotas.push(nuevaMascota)
+    }
+    countMascotas() {
+        console.log(this.mascotas.length)
+    }
+    getMascotas() 
+    {
+        console.log(this.mascotas)
+    }
+    addBook(nuevoLibro) {
+        this.libros.push(nuevoLibro)
+    }
+    getBookNames() {
+        this.libros.map((libro) => console.log(libro.nombre));
     }
 }
 
-let pruebaDeUsuario = new Usuario("String","String",["nada que perder","todavia hay esperanza"],["perro","perro"])
-console.log(pruebaDeUsuario);
+//nuevo user
+const user1 = new Usuario('Tais', 'Gonzalez', [{nombre:'Nada que perder', autor: 'Edir Macedo'}], ['coco', 'cloty']);
 
-const mascotas = ["perro","perro"];
-console.log(mascotas.length);
+user1.addMascota(nuevaMascota = 'patitas');
+user1.addBook(nuevoLibro = {nombre: 'Ficciones', autor: 'Borges'});
+
+user1.getFullName();
+user1.countMascotas();
+user1.getMascotas();
+user1.getBookNames();
