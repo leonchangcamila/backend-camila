@@ -1,53 +1,39 @@
-const fs = require('fs');
+const express = requiere('express');
+const app = express();
 
-class Contenedor {
+const server = app.listen(8080,()=>{
+    console.log("Listening on port 8080");
+})
+app.get('/productos',(req,res)=>{
+    res.send({productos:
+        [
+            {
+              "nombre":"sillon",
+              "precio":"15000",
+              "color":"bordo",
+              "id":1
+            },
+            {
+              "nombre":"silla",
+              "precio":"3000",
+              "color":"marron",
+              "id":2
+            },
+            {
+              "nombre":"mesa",
+              "precio":"5000",
+              "color":"negro",
+              "id":3
+            }
+        ]       
+    });
+});
 
-  id = 1;
+app.get('/productoRandom',async (req,res)=>{
+    let data = await fs.promises.writeFile(pathToUsers,JSON.stringify([newPrductos],null,2))
+    let productos= JSON.parse(data)
 
-  constructor(nombreArchivo) {
-    this.nombreArchivo = nombreArchivo;
-  }
-
-  async save(objeto) {
-    objeto['id'] = this.id;
-    this.id++;
-    const contenido = JSON.parse(await fs.promises.readFile(this.nombreArchivo));
-    contenido.push(objeto);
-    await fs.promises.writeFile(this.nombreArchivo, JSON.stringify(contenido));
-  }
-
-  saveThen(objeto) {
-    objeto['id'] = this.id;
-    this.id++;
-    return fs
-      .promises
-      .readFile(this.nombreArchivo)
-      .then((contenido) => {
-        const contenidoParseado = JSON.parse(contenido);
-        contenidoParseado.push(objeto);
-        return contenidoParseado;
-      })
-      .then((nuevoContenido) => {
-        return fs.promises.writeFile(this.nombreArchivo, JSON.stringify(nuevoContenido));
-      });
-  }
-
-  async getAll() {
-    try {
-      const contenidoCrudo = await fs.promises.readFile(this.nombreArchivo);
-      const contenido = JSON.parse(contenidoCrudo);
-      return contenido;
-    } catch (error) {
-      console.log('Error en getAll: ', error);
-      return [];
-    }
-  }
-}
-
-const ejecutarProductos = async () => {
-  const productos = new Contenedor('productos.txt');
-  await productos.save({title: 'Campera', price: 1000});
-  console.log(await productos.getAll());
-}
-
-ejecutarProductos();
+    let mathRandom = Math.floor(Math.random()*(productos.length)+1)
+    console.log(mathRandom)
+    return {status:"success",message:"Producto"}
+});

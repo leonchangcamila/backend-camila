@@ -1,39 +1,53 @@
-class Usuario{
-    constructor(nombre,apellido,libros,mascotas){
-        this.nombre=nombre;
-        this.apellido=apellido;
-        this.libros=libros;
-        this.mascotas=mascotas;
-    }
+const fs = require('fs');
 
-    getFullName () {
-        console.log(this.nombre, this.apellido)
+class Contenedor {
+
+  id = 1;
+
+  constructor(nombreArchivo) {
+    this.nombreArchivo = nombreArchivo;
+  }
+
+  async save(objeto) {
+    objeto['id'] = this.id;
+    this.id++;
+    const contenido = JSON.parse(await fs.promises.readFile(this.nombreArchivo));
+    contenido.push(objeto);
+    await fs.promises.writeFile(this.nombreArchivo, JSON.stringify(contenido));
+  }
+
+  saveThen(objeto) {
+    objeto['id'] = this.id;
+    this.id++;
+    return fs
+      .promises
+      .readFile(this.nombreArchivo)
+      .then((contenido) => {
+        const contenidoParseado = JSON.parse(contenido);
+        contenidoParseado.push(objeto);
+        return contenidoParseado;
+      })
+      .then((nuevoContenido) => {
+        return fs.promises.writeFile(this.nombreArchivo, JSON.stringify(nuevoContenido));
+      });
+  }
+
+  async getAll() {
+    try {
+      const contenidoCrudo = await fs.promises.readFile(this.nombreArchivo);
+      const contenido = JSON.parse(contenidoCrudo);
+      return contenido;
+    } catch (error) {
+      console.log('Error en getAll: ', error);
+      return [];
     }
-    addMascota (nuevaMascota) {
-        this.mascotas.push(nuevaMascota)
-    }
-    countMascotas() {
-        console.log(this.mascotas.length)
-    }
-    getMascotas() 
-    {
-        console.log(this.mascotas)
-    }
-    addBook(nuevoLibro) {
-        this.libros.push(nuevoLibro)
-    }
-    getBookNames() {
-        this.libros.map((libro) => console.log(libro.nombre));
-    }
+  }
 }
 
-//nuevo user
-const user1 = new Usuario('Tais', 'Gonzalez', [{nombre:'Nada que perder', autor: 'Edir Macedo'}], ['coco', 'cloty']);
+const ejecutarProductos = async () => {
+  const productos = new Contenedor('productos.txt');
+  await productos.save({title: 'Campera', price: 1000});
+  console.log(await productos.getAll());
+}
 
-user1.addMascota(nuevaMascota = 'patitas');
-user1.addBook(nuevoLibro = {nombre: 'Ficciones', autor: 'Borges'});
-
-user1.getFullName();
-user1.countMascotas();
-user1.getMascotas();
-user1.getBookNames();
+ejecutarProductos();
