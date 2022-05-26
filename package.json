@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/leonchangcamila/backend-camila/issues"
   },
-  "homepage": "https://github.com/leonchangcamila/backend-camila#readme"
+  "homepage": "https://github.com/leonchangcamila/backend-camila#readme",
+  "dependencies": {
+    "ejs": "^3.1.8",
+    "pug": "^3.0.2"
+  }
 }
